@@ -5,12 +5,20 @@ use App\Models\Post;
 use Illuminate\Http\Request;
 use App\Http\Requests\Postrequest;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Auth;
 
 use function Ramsey\Uuid\v1;
 
 class PostCOntroller extends Controller
 {
     public function index(){
+
+        // if (Auth::check()) {
+        //     return "logged in";
+        // }else{
+        //     return 'Not logged In';
+        // }
+
         $posts = Post::all();
         return view('posts.index',compact('posts'));
     }
