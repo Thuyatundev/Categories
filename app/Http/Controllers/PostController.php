@@ -42,14 +42,20 @@ class PostCOntroller extends Controller
             //     return redirect('/posts/create')->withErrors($validator)->withInput();
             // }
         
-        $post = new Post();
-        $post->title = request('title');
-        $post->body = request('body');
-        $post->created_at = now();
-        $post->updated_at = now();
-        $post->save();
+        // $post = new Post();
+        // $post->title = request('title');
+        // $post->body = request('body');
+        // $post->created_at = now();
+        // $post->updated_at = now();
+        // $post->save();
+        Post::create([
+            'title'=>$request->title,
+            'body'=>$request->body
+        ]);
+        // session()->flash('success','A post was created successfully');
+        return redirect('/posts')->with('success', 'A post was updated successfully');
 
-        return redirect('/posts');
+
     }
 
    public function update(Postrequest $request,$id){
@@ -66,16 +72,22 @@ class PostCOntroller extends Controller
 
         
        $post = Post::find($id);
-       $post->title = request('title');
-       $post->body = request('body');
-       $post->updated_at = now();
-       $post->save();
+    //    $post->title = request('title');
+    //    $post->body = request('body');
+    //    $post->updated_at = now();
+    //    $post->save();
+       $post->update($request->only(['title','body']));
+    //    $post->update($request->all(['title','body']));
+        //   $post->update($request->except(['title','body']));
 
-       return redirect('posts');
+      return redirect('/posts')->with('success','A post was updated successfully');
+
+    //    return redirect('posts');
    }
 
    public function create(){
        return view('posts.create');
+      
    }
     public function show($id){
         $post = Post::find($id);
@@ -84,9 +96,12 @@ class PostCOntroller extends Controller
 
     public function destroy($id){
         Post::destroy($id);
+        return redirect('/posts')->with('success', 'A post was deleted successfully');
 
-        return redirect('posts');
+        // return redirect('posts');
     }
+
+    
     public function edit($id){
         $post = Post::find($id);
         return view('posts.edit',compact('post'));
