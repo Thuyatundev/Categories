@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Auth;
 
 use function Ramsey\Uuid\v1;
 
-class PostCOntroller extends Controller
+class PostController extends Controller
 {
     public function index(){
 
@@ -19,7 +19,14 @@ class PostCOntroller extends Controller
         //     return 'Not logged In';
         // }
 
-        $posts = Post::all();
+        // $posts = Post::all();
+
+        $posts = Post::paginate(4);
+        /*********/
+        // $posts = Post::select('posts.*', 'users.name as author_name')
+        // ->join('users', 'posts.user_id', 'users.id')
+        // ->paginate(5);
+
         return view('posts.index',compact('posts'));
     }
     public function store(Postrequest $request){
@@ -91,6 +98,10 @@ class PostCOntroller extends Controller
    }
     public function show($id){
         $post = Post::find($id);
+        // //********/
+        // $post = Post::select('posts.*', 'users.name as author_name')
+        // ->join('users', 'posts.user_id', 'users.id')
+        // ->find($id);
         return view('posts.show',compact('post'));
     }
 

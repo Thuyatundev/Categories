@@ -21,8 +21,8 @@
       <div class="m-2">
           <h3 class="text-dark">{{$post->title}}</h3>
           {{-- {{$post->created_at->format('M d, Y ')}} --}}
-          {{$post->created_at->diffForHumans()}}
-           By mark
+         <i>{{$post->created_at->diffForHumans()}}</i>
+           By {{ $post ->author_name}}
           <p href="/posts/{{$post->id}}">{{$post->body}}
             @auth
           <a href="/posts/{{$post->id}}" class="btn btn-outline-primary btn-sm">Detail</a>
@@ -43,6 +43,8 @@
       </div>    
       <hr>
   @endforeach
+
+  {{ $posts->links() }}
 </div>
 @endsection
 
