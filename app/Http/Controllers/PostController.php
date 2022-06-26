@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests\Postrequest;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 use function Ramsey\Uuid\v1;
 
@@ -21,11 +22,10 @@ class PostController extends Controller
 
         // $posts = Post::all();
 
-        $posts = Post::paginate(4);
-        /*********/
-        // $posts = Post::select('posts.*', 'users.name as author_name')
-        // ->join('users', 'posts.user_id', 'users.id')
-        // ->paginate(5);
+        // $posts = Post::paginate(4);
+        $posts = Post::select('posts.*', 'users.name',)
+        ->join('users', 'posts.user_id', '=', 'users.id')
+        ->paginate(3);
 
         return view('posts.index',compact('posts'));
     }
@@ -98,10 +98,11 @@ class PostController extends Controller
    }
     public function show($id){
         $post = Post::find($id);
-        // //********/
-        // $post = Post::select('posts.*', 'users.name as author_name')
-        // ->join('users', 'posts.user_id', 'users.id')
-        // ->find($id);
+        $post = Post::where('posts.id', '=', $id)
+        ->join('users', 'posts.user_id', '=', 'users.id')
+        ->select('posts.*', 'users.name',)
+        ->first();
+
         return view('posts.show',compact('post'));
     }
 
