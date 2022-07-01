@@ -10,7 +10,7 @@
     <h2 class="card-header text-center">Post show</h2>
     <div class="card-body">
       <h5 class="card-title">{{$post->title}}</h5>
-      <p class="text-muted"><i>{{$post->updated_at->diffForHumans()}}</i> by <b> {{$post->name}}</b></p><br>
+      <p class="text-muted"><i>{{$post->created_at->diffForHumans()}}</i> by <b> {{$post->author}}</b></p><br>
       <p class="card-text">{{$post->body}}</p>
     </div>
     <a href="/posts" type="button" class="btn btn-outline-info btn-block">Back</a>

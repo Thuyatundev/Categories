@@ -12,7 +12,7 @@ use function Ramsey\Uuid\v1;
 
 class PostController extends Controller
 {
-    public function index(){
+    public function index(Request $request){
 
         // if (Auth::check()) {
         //     return "logged in";
@@ -21,11 +21,15 @@ class PostController extends Controller
         // }
 
         // $posts = Post::all();
-
-        // $posts = Post::paginate(4);
-        $posts = Post::select('posts.*', 'users.name',)
-        ->join('users', 'posts.user_id', '=', 'users.id')
+        $posts = Post::where('title','like','%'.$request->search.'%')
+        ->orderBy('id','desc')
         ->paginate(3);
+
+
+        // $posts = Post::select('posts.*', 'users.name as author',)
+        // ->join('users', 'posts.user_id', '=', 'users.id')
+        // ->orderBy('id','desc')
+        // ->paginate(3);
 
         return view('posts.index',compact('posts'));
     }
@@ -38,6 +42,7 @@ class PostController extends Controller
         // //     'body.required'=>'စာသားထည့်',
         // //     'body.min'=>'နည်းဆူ'
         // // ]);
+
              $this->myvalidate($request);
 
             // $validator = Validator::make($request->all(),[
@@ -55,12 +60,14 @@ class PostController extends Controller
         // $post->created_at = now();
         // $post->updated_at = now();
         // $post->save();
+
         Post::create([
             'title'=>$request->title,
-            'body'=>$request->body
+            'body'=>$request->body,
+            'user_id'=> auth()->id(),
         ]);
         // session()->flash('success','A post was created successfully');
-        return redirect('/posts')->with('success', 'A post was updated successfully');
+        return redirect('/posts')->with('success', 'A post was created successfully');
 
 
     }
@@ -75,21 +82,25 @@ class PostController extends Controller
         //         'body.required'=>'စာသားထည့်',
         //         'body.min'=>'နည်းဆူ'
         //     ]);
+
          $this->myvalidate($request);
 
-        
        $post = Post::find($id);
+
     //    $post->title = request('title');
     //    $post->body = request('body');
     //    $post->updated_at = now();
     //    $post->save();
+
        $post->update($request->only(['title','body']));
+
     //    $post->update($request->all(['title','body']));
         //   $post->update($request->except(['title','body']));
 
       return redirect('/posts')->with('success','A post was updated successfully');
 
     //    return redirect('posts');
+
    }
 
    public function create(){
@@ -97,10 +108,12 @@ class PostController extends Controller
       
    }
     public function show($id){
-        $post = Post::find($id);
-        $post = Post::where('posts.id', '=', $id)
-        ->join('users', 'posts.user_id', '=', 'users.id')
-        ->select('posts.*', 'users.name',)
+
+        // $post = Post::find($id);
+        
+        $post = Post::select(['posts.*','users.name as author'])
+        ->join('users','users.id', 'posts.user_id')
+        ->where('post.id', $id)
         ->first();
 
         return view('posts.show',compact('post'));

@@ -10,9 +10,14 @@
                 <li class="nav-item active">
                   <a class="nav-link text-success" href="/posts">Home<span class="sr-only">(current)</span></a>
                 </li>
+                @auth
                 <li class="nav-item">
                   <a class="nav-link text-success" href="/posts/create">Create-Post</a>
                 </li>
+                <li class="nav-item">
+                  <a class="nav-link text-success" href="/my-posts">My-Posts</a>
+                </li>
+                @endauth
                 @if (Auth::check())
                 <li class="nav-item dropdown">
                   <a class="nav-link dropdown-toggle text-success" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
