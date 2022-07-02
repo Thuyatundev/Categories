@@ -20,6 +20,15 @@
         <div style="color:red;">{{$message}}</div>
         @enderror
         <br>
+        
+        <div class="input-group mb-3">
+          <select class="form-select" name="category[]" multiple>
+              <option selected>Choose...</option>
+              @foreach($categories as $category)
+              <option value="{{ $category->id }}">{{ $category->name }}</option>
+              @endforeach
+          </select>
+      </div>
     
         <button type="submit" class="btn btn-outline-success text-light">Create</button>
         <button type="submit" class="btn btn-outline-danger justify-content-between"><a href="/posts" class="text-light" style="text-decoration: none;">Cancel</a> </button>

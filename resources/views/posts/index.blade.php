@@ -46,6 +46,13 @@
           @endphp   --}}
           
         <p href="/posts/{{$post->id}}">{{$post->body}}
+
+          <ul>
+            @foreach ($post->categories as $category)
+                <li>{{ $category->name }}</li>
+            @endforeach
+            </ul>
+
           @if($post->isOwnPost())
         <a href="/posts/{{$post->id}}" class="btn btn-outline-primary btn-sm">Detail</a>
         </p>

@@ -19,6 +19,15 @@
       <div style="color: red;">{{$message}}</div>
       @enderror
       <br>
+      
+      <div class="input-group mb-3">
+        <select class="form-select" name="category[]" multiple>
+            <option disabled>Choose...</option>
+            @foreach($categories as $category)
+                <option value="{{ $category->id }}">{{ $category->name }}</option>
+            @endforeach
+        </select>
+    </div>
   
       <button type="submit" class="btn btn-outline-success text-light">Update</button>
       

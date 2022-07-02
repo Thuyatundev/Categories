@@ -12,6 +12,13 @@
       <h5 class="card-title">{{$post->title}}</h5>
       <p class="text-muted"><i>{{$post->created_at->diffForHumans()}}</i> by <b> {{$post->author}}</b></p><br>
       <p class="card-text">{{$post->body}}</p>
+
+      <ul>
+        @foreach ($post->categories as $category)
+            <li>{{ $category->name }}</li>
+        @endforeach
+        </ul>
+
     </div>
     <a href="/posts" type="button" class="btn btn-outline-info btn-block">Back</a>
   </div>

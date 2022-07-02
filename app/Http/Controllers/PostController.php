@@ -7,6 +7,8 @@ use App\Http\Requests\Postrequest;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use App\Models\Category;
+use App\Models\CategoryPost;
 
 use function Ramsey\Uuid\v1;
 
@@ -61,11 +63,18 @@ class PostController extends Controller
         // $post->updated_at = now();
         // $post->save();
 
-        Post::create([
+        $post = Post::create([
             'title'=>$request->title,
             'body'=>$request->body,
             'user_id'=> auth()->id(),
         ]);
+
+        foreach($request->category as $category) {
+            CategoryPost::create([
+                'category_id' => $category,
+                'post_id'     => $post->id
+            ]);
+        }
         // session()->flash('success','A post was created successfully');
         return redirect('/posts')->with('success', 'A post was created successfully');
 
@@ -91,6 +100,19 @@ class PostController extends Controller
     //    $post->body = request('body');
     //    $post->updated_at = now();
     //    $post->save();
+    $post->update([
+        'title' => $request->title,
+        'body'  => $request->body
+    ]);
+
+    CategoryPost::where('post_id', $id)->delete();
+    foreach($request->category as $category) {
+        CategoryPost::create([
+            'category_id' => $category,
+            'post_id'     => $id
+        ]);
+    }
+    
 
        $post->update($request->only(['title','body']));
 
@@ -104,7 +126,9 @@ class PostController extends Controller
    }
 
    public function create(){
-       return view('posts.create');
+    $categories = Category::get();
+    //    return view('posts.create');
+    return view('posts.create', compact('categories'));
       
    }
     public function show($id){
@@ -127,9 +151,12 @@ class PostController extends Controller
     }
 
     
-    public function edit($id){
+    public function edit($id)
+    {
         $post = Post::find($id);
-        return view('posts.edit',compact('post'));
+        $categories = Category::get();
+        return view('posts.edit', compact('post', 'categories'));
+        // return view('posts.edit',compact('post'));
     }
 
     public function myvalidate($request){
